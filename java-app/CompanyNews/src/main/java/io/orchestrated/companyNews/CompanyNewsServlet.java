@@ -11,7 +11,7 @@ import java.io.IOException;
 public class CompanyNewsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        response.getWriter().print("Company News!");  
+        response.getWriter().print("Welcome to Company News!");  
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
