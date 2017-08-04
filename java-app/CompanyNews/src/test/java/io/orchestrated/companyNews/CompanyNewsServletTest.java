@@ -33,14 +33,13 @@ public class CompanyNewsServletTest {
 
         when(response.getWriter()).thenReturn(printWriter);
 
-        new CompanyNewsServlet().doGet(request, response);
+        CompanyNewsServlet servlet = new CompanyNewsServlet();
+
+        servlet.setObjectStoreClass("io.orchestrated.companyNews.objectStore.prevayler.PrevaylerObjectStore");
+        servlet.doGet(request, response);
+
         String[] headlines = (String[])this.parseResponse(stringWriter);
-        assertEquals(5, headlines.length);
-        assertEquals("First headline", headlines[0]);
-        assertEquals("Second headline", headlines[1]);
-        assertEquals("Third headline", headlines[2]);
-        assertEquals("Fourth headline", headlines[3]);
-        assertEquals("Fifth headline", headlines[4]);
+        assertEquals(0, headlines.length);
     }
 
     @Test
