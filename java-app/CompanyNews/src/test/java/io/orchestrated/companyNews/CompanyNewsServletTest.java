@@ -14,6 +14,8 @@ import java.io.StringWriter;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
+import com.google.gson.Gson;
+
 public class CompanyNewsServletTest {
     @Mock private HttpServletRequest request;
     @Mock private HttpServletResponse response;
@@ -25,15 +27,20 @@ public class CompanyNewsServletTest {
     }
 
     @Test
-    public void doGet() throws Exception {
+    public void testMustReturnHeadlines() throws Exception {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
 
         when(response.getWriter()).thenReturn(printWriter);
 
         new CompanyNewsServlet().doGet(request, response);
-
-        assertEquals("Welcome to Company News!", stringWriter.toString());
+        String[] headlines = (String[])this.parseResponse(stringWriter);
+        assertEquals(5, headlines.length);
+        assertEquals("First headline", headlines[0]);
+        assertEquals("Second headline", headlines[1]);
+        assertEquals("Third headline", headlines[2]);
+        assertEquals("Fourth headline", headlines[3]);
+        assertEquals("Fifth headline", headlines[4]);
     }
 
     @Test
@@ -57,5 +64,10 @@ public class CompanyNewsServletTest {
 
         verify(request).setAttribute("user", "Dolly");
         verify(requestDispatcher).forward(request,response);
+    }
+
+    private Object parseResponse(StringWriter stringWriter) {
+        Gson gson = new Gson();
+        return gson.fromJson(stringWriter.toString(), String[].class);
     }
 }

@@ -11,7 +11,8 @@ import java.io.IOException;
 public class CompanyNewsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        response.getWriter().print("Welcome to Company News!");  
+        response.setContentType("application/json");
+        response.getWriter().print("[\"First headline\",\"Second headline\", \"Third headline\", \"Fourth headline\", \"Fifth headline\"]");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

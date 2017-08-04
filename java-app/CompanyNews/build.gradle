@@ -6,9 +6,13 @@ plugins {
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
 dependencies {
+    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'org.prevayler:prevayler-core:2.6'
+    compile 'org.prevayler:prevayler-factory:2.6'
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0' 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.19'
