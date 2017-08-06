@@ -24,12 +24,14 @@ public class PrevaylerObjectStoreTest {
         String headline = "Headline 1";
         String story = "MELBOURNE - Company News site launched.";
 
-        NewsArticle newsArticle = new NewsArticle(headline, story);
+        NewsArticle newsArticle = new NewsArticle();
+        newsArticle.setHeadline(headline);
+        newsArticle.setStory(story);
 
-        int id = this.objectStore.store(newsArticle);
+        newsArticle = (NewsArticle)this.objectStore.store(newsArticle);
 
-        NewsArticle retrievedNewsArticle = (NewsArticle)this.objectStore.get(id);
-        assertEquals(id, retrievedNewsArticle.getId());
+        NewsArticle retrievedNewsArticle = (NewsArticle)this.objectStore.get(newsArticle.getId());
+        assertEquals(newsArticle.getId(), retrievedNewsArticle.getId());
         assertEquals(headline, retrievedNewsArticle.getHeadline());
         assertEquals(story, retrievedNewsArticle.getStory());
     }
@@ -40,15 +42,17 @@ public class PrevaylerObjectStoreTest {
         String headline = "Headline 1";
         String story = "MELBOURNE - Company News site launched.";
 
-        NewsArticle newsArticle = new NewsArticle(headline, story);
+        NewsArticle newsArticle = new NewsArticle();
+        newsArticle.setHeadline(headline);
+        newsArticle.setStory(story);
 
-        int id = this.objectStore.store(newsArticle);
+        newsArticle = (NewsArticle)this.objectStore.store(newsArticle);
 
-        NewsArticle retrievedNewsArticle = (NewsArticle)this.objectStore.get(id);
-        assertEquals(id, retrievedNewsArticle.getId());
+        NewsArticle retrievedNewsArticle = (NewsArticle)this.objectStore.get(newsArticle.getId());
+        assertEquals(newsArticle.getId(), retrievedNewsArticle.getId());
 
-        this.objectStore.delete(id);
-        retrievedNewsArticle = (NewsArticle)this.objectStore.get(id);
+        NewsArticle deletedNewsArticle = (NewsArticle)this.objectStore.delete(newsArticle.getId());
+        retrievedNewsArticle = (NewsArticle)this.objectStore.get(deletedNewsArticle.getId());
         assertNull(retrievedNewsArticle);
     }
 }

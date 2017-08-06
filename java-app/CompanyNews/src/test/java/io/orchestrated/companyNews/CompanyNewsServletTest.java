@@ -10,16 +10,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Collection;
+import java.util.ArrayList;
+
+import io.orchestrated.companyNews.objectStore.ObjectStore;
+import io.orchestrated.companyNews.objectStore.Model;
+import io.orchestrated.companyNews.models.NewsArticle;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
-
-import com.google.gson.Gson;
 
 public class CompanyNewsServletTest {
     @Mock private HttpServletRequest request;
     @Mock private HttpServletResponse response;
     @Mock private RequestDispatcher requestDispatcher;
+    @Mock private ObjectStore objectStore;
 
     @Before
     public void setUp() throws Exception {
@@ -28,18 +33,27 @@ public class CompanyNewsServletTest {
 
     @Test
     public void testMustReturnHeadlines() throws Exception {
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stringWriter);
+        when(request.getRequestDispatcher("response.jsp"))
+            .thenReturn(requestDispatcher);
 
-        when(response.getWriter()).thenReturn(printWriter);
+        Collection<Model> newsArticles = new ArrayList<Model>();
+        NewsArticle newsArticle;
+        for (int i = 0; i < 5; i++) {
+            newsArticle = new NewsArticle();
+            newsArticle.setHeadline("Headline " + i);
+            newsArticle.setStory("Story " + i);
+            newsArticles.add(newsArticle);
+        }
+
+        when(objectStore.getList()).
+            thenReturn(newsArticles);
 
         CompanyNewsServlet servlet = new CompanyNewsServlet();
+        servlet.setObjectStore(objectStore);
 
-        servlet.setObjectStoreClass("io.orchestrated.companyNews.objectStore.prevayler.PrevaylerObjectStore");
         servlet.doGet(request, response);
 
-        String[] headlines = (String[])this.parseResponse(stringWriter);
-        assertEquals(0, headlines.length);
+        verify(request).setAttribute("articles", newsArticles);
     }
 
     @Test
@@ -63,10 +77,5 @@ public class CompanyNewsServletTest {
 
         verify(request).setAttribute("user", "Dolly");
         verify(requestDispatcher).forward(request,response);
-    }
-
-    private Object parseResponse(StringWriter stringWriter) {
-        Gson gson = new Gson();
-        return gson.fromJson(stringWriter.toString(), String[].class);
     }
 }

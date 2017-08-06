@@ -17,8 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import io.orchestrated.companyNews.models.NewsArticle;
 import io.orchestrated.companyNews.objectStore.ObjectStore;
 import io.orchestrated.companyNews.objectStore.Model;
-
-import com.google.gson.Gson;
+import io.orchestrated.companyNews.objectStore.StorageException;
 
 @WebServlet(
         name = "CompanyNewsServlet", 
@@ -36,6 +35,11 @@ public class CompanyNewsServlet extends HttpServlet {
     public void init(ServletConfig config) {
         String objectStoreClassName = config.getInitParameter("objectStoreClass");
         this.setObjectStoreClass(objectStoreClassName);
+    }
+
+    protected void setObjectStore(ObjectStore objectStore)
+    {
+            this.objectStore = objectStore;
     }
 
     protected void setObjectStoreClass(String objectStoreClassName)
@@ -59,14 +63,15 @@ public class CompanyNewsServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
-        response.setContentType("application/json");
-        Collection<Model> newsArticles = this.objectStore.getList();
-        ArrayList<String> headlines = new ArrayList<String>();
-        for (Model newsArticle : newsArticles) {
-            headlines.add(((NewsArticle)newsArticle).getHeadline());
+        Collection<Model> newsArticles = null;
+        try {
+            newsArticles = this.objectStore.getList();
+        } catch (StorageException exception) {
+            throw new ServletException("Error retrieving list of news articles.", exception);
         }
-        Gson gson = new Gson();
-        response.getWriter().print(gson.toJson(headlines.toArray()));
+
+        request.setAttribute("articles", newsArticles);
+        request.getRequestDispatcher("response.jsp").forward(request, response);
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

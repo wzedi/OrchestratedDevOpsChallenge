@@ -7,9 +7,13 @@ public class NewsArticle extends Model
     private String headline;
     private String story;
 
-    public NewsArticle(String headline, String story)
+    public void setHeadline(String headline)
     {
         this.headline = headline;
+    }
+
+    public void setStory(String story)
+    {
         this.story = story;
     }
 
