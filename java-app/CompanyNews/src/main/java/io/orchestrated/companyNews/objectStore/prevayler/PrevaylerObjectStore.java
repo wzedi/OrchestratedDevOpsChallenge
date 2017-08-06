@@ -18,7 +18,7 @@ public class PrevaylerObjectStore implements ObjectStore, Serializable
 {
     private final String DATA_FOLDER = "data";
     private final Hashtable<Integer, Model> models;
-    private Prevayler<PrevaylerObjectStore> prevayler = null;
+    transient private Prevayler<PrevaylerObjectStore> prevayler = null;
 
     private static final long serialVersionUID = 10298730129l;
 
@@ -53,10 +53,19 @@ public class PrevaylerObjectStore implements ObjectStore, Serializable
         return this.prevayler;
     }
 
+    private void commit()
+    {
+        try {
+            getPrevayler().takeSnapshot();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // prevalent operations
     protected void prevalentStore(Model modelToStore)
     {
-        this.models.put(modelToStore.getId(), modelToStore);
+        this.models.put(Integer.valueOf(modelToStore.getId()), modelToStore);
     }
 
     protected Model prevalentGet(int id)
@@ -64,9 +73,14 @@ public class PrevaylerObjectStore implements ObjectStore, Serializable
         return this.models.get(Integer.valueOf(id));
     }
 
+    protected Collection<Model> prevalentGetList()
+    {
+        return this.models.values();
+    }
+
     protected Model prevalentDelete(int id)
     {
-        return this.models.remove(id);
+        return this.models.remove(Integer.valueOf(id));
     }
 
     // object store implementation
@@ -80,6 +94,7 @@ public class PrevaylerObjectStore implements ObjectStore, Serializable
             throw new StorageException("Unable to create model", exception);
         }
 
+        commit();
         return storedModel;
     }
 
@@ -93,12 +108,22 @@ public class PrevaylerObjectStore implements ObjectStore, Serializable
             throw new StorageException("Unable to get model with id " + id, exception);
         }
 
+        commit();
         return retrievedModel;
     }
 
     public Collection<Model> getList() throws StorageException
     {
-        return this.models.values();
+        Collection<Model> retrievedList;
+        try {
+            GetModelList getModelList = new GetModelList();
+            retrievedList = getPrevayler().execute(getModelList);
+        } catch (Exception exception) {
+            throw new StorageException("Unable to get model list", exception);
+        }
+
+        commit();
+        return retrievedList;
     }
 
     public Model delete(int id) throws StorageException
@@ -112,6 +137,7 @@ public class PrevaylerObjectStore implements ObjectStore, Serializable
             throw new StorageException("Unable to delete model with id " + id, exception);
         }
 
+        commit();
         return deletedModel;
     }
 }

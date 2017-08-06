@@ -62,7 +62,35 @@ public class CompanyNewsServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+        throws ServletException, IOException 
+    {
+        Collection<Model> newsArticles = getArticles();
+        request.setAttribute("articles", newsArticles);
+        request.getRequestDispatcher("response.jsp").forward(request, response);
+    }
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException 
+    {
+        //Store newly submitted article and refresh page
+        try {
+            NewsArticle newsArticle = new NewsArticle();
+            newsArticle.setHeadline(request.getParameter("headline"));
+            newsArticle.setStory(request.getParameter("story"));
+
+            this.objectStore.store(newsArticle);
+        } catch (StorageException e) {
+            e.printStackTrace();
+        }
+
+        Collection<Model> newsArticles = getArticles();
+        request.setAttribute("articles", newsArticles);
+        request.getRequestDispatcher("response.jsp").forward(request, response); 
+    }
+
+    private Collection<Model> getArticles()
+        throws ServletException
+    {
         Collection<Model> newsArticles = null;
         try {
             newsArticles = this.objectStore.getList();
@@ -70,15 +98,6 @@ public class CompanyNewsServlet extends HttpServlet {
             throw new ServletException("Error retrieving list of news articles.", exception);
         }
 
-        request.setAttribute("articles", newsArticles);
-        request.getRequestDispatcher("response.jsp").forward(request, response);
-    }
-
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-        String name = request.getParameter("name");
-        if (name == null) name = "World";
-        request.setAttribute("user", name);
-        request.getRequestDispatcher("response.jsp").forward(request, response); 
+        return newsArticles;
     }
 }

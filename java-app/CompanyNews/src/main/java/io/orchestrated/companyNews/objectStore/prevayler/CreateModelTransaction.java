@@ -13,22 +13,19 @@ public class CreateModelTransaction implements TransactionWithQuery<PrevaylerObj
     private static final long serialVersionUID = 18236198973l;
 
     private Model model;
-    private final Random idGenerator;
 
     public CreateModelTransaction() 
     {
-        this.idGenerator = new Random();
     }
 
     public CreateModelTransaction(Model model) 
     {
         this.model = model;
-        this.idGenerator = new Random();
     }
 
     public Model executeAndQuery(PrevaylerObjectStore prevaylerObjectStore, Date executionTime) throws Exception 
     {
-        this.model.setId(this.idGenerator.nextInt());
+        this.model.setId(new Random().nextInt());
         prevaylerObjectStore.prevalentStore(this.model);
         return model;
     }

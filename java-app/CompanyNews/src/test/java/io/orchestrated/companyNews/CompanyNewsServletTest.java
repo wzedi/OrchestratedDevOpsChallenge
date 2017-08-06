@@ -50,32 +50,33 @@ public class CompanyNewsServletTest {
 
         CompanyNewsServlet servlet = new CompanyNewsServlet();
         servlet.setObjectStore(objectStore);
-
         servlet.doGet(request, response);
 
         verify(request).setAttribute("articles", newsArticles);
     }
 
     @Test
-    public void doPostWithoutName() throws Exception {
+    public void doPostNewArticle() throws Exception {
+        when(request.getParameter("headline")).thenReturn("headline");
+        when(request.getParameter("story")).thenReturn("story");
         when(request.getRequestDispatcher("response.jsp"))
             .thenReturn(requestDispatcher);
 
-        new CompanyNewsServlet().doPost(request, response);
+        NewsArticle newsArticle = new NewsArticle();
+        newsArticle.setHeadline(request.getParameter("headline"));
+        newsArticle.setStory(request.getParameter("story"));
 
-        verify(request).setAttribute("user", "World");
+        Collection<Model> newsArticles = new ArrayList<Model>();
+        newsArticles.add(newsArticle);
+
+        when(objectStore.getList()).
+            thenReturn(newsArticles);
+
+        CompanyNewsServlet servlet = new CompanyNewsServlet();
+        servlet.setObjectStore(objectStore);
+        servlet.doPost(request, response);
+
         verify(requestDispatcher).forward(request,response);
-    }
-
-    @Test
-    public void doPostWithName() throws Exception {
-        when(request.getParameter("name")).thenReturn("Dolly");
-        when(request.getRequestDispatcher("response.jsp"))
-            .thenReturn(requestDispatcher);
-
-        new CompanyNewsServlet().doPost(request, response);
-
-        verify(request).setAttribute("user", "Dolly");
-        verify(requestDispatcher).forward(request,response);
+        verify(request).setAttribute("articles", newsArticles);
     }
 }
