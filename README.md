@@ -10,7 +10,10 @@
 * In production the app servers are deployed into an auto scaling group in a private subnet with traffic routed to the servers through an ELB. The auto scaling group provides continuity through single instance failures and the ELB with scaling group facilitates scaling.
 * The production environments include Bastion servers in the public subnet. These servers act as SSH jump boxes to the app server EC2 instances in the private subnet. There is one bastion server per AZ. While this is not strictly required it does ensure SSH access will be available in the unikely event of an AZ failure. For cost optimisation the bastion servers could be stopped and only started when SSH access is required.
 * The production environments include NAT gateways for Internet access from the EC2 servers in the private subnet. This allows for OS package and app dependency installation. There is one NAT gateway per AZ for high availability. There is an option to use the bastion EC2 instances as NAT instances with a custom high availability script.
+* For the Java app added indirection for the storage technology so that Prevayler can be replaced with alternative technologies, like AWS CLI with DynamoDB without requiring changes in the application code.
 
 ## Tool Selection and Configuration
+* gradle - build tool and dependency manager. Generated wrapper script for project independence across dev environments.
+
 
 ## Recommendations
