@@ -211,7 +211,80 @@
                     ]
                 }
             },
+ 
+            "CodeDeployRole": {
+                "Type": "AWS::IAM::Role",
+                "Properties": {
+                    "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                        {
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "ec2.amazonaws.com"
+                                    ]
+                            },
+                            "Action": [
+                                "sts:AssumeRole"
+                                ]
+                        }
+                        ]
+                    },
+                    "Path": "/",
+                    "Policies": [
+                    {
+                        "PolicyName": "CodeDeploy",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                            {
+                                "Action": [
+                                    "s3:Get*",
+                                    "s3:List*"
+                                ],
+                                "Resource": [
+                                    "arn:aws:s3:::*",
+                                    "arn:aws:s3:::aws-codedeploy-ap-southeast-2/*",
+                                ],
+                                "Effect": "Allow"
+                            }
+                            ]
+                        }
+                    },
+                    {
+                        "PolicyName": "S3ReadOnly",
+                        "PolicyDocument": {
+                            "Version": "2012-10-17",
+                            "Statement": [
+                            {
+                                "Effect": "Allow",
+                                "Action": [
+                                    "s3:Get*",
+                                    "s3:List*"
+                                ],
+                                "Resource": [
+                                    "arn:aws:s3:::orchestrated.devopschallenge.deploy",
+                                ]
+                            }
+                            ]
+                        }
+                    }
+                    ]
+                }
+            },
 
+            "WebServerInstanceProfile": {
+                "Type": "AWS::IAM::InstanceProfile",
+                "Properties": {
+                    "Path": "/",
+                    "Roles": [
+                    {
+                        "Ref": "CodeDeployRole"
+                    }
+                    ]
+                }
+            },
 
             "WebServerInstance" : {
                 "Type" : "AWS::EC2::Instance",
@@ -261,7 +334,11 @@
                     "ImageId" : { "Ref" : "ImageId" },
                     "InstanceType" : { "Ref" : "InstanceType" },
                     "KeyName" : { "Ref" : "KeyName" },
-                    "Tags" : [ {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} } ],
+                    "IamInstanceProfile" : { "Ref" : "WebServerInstanceProfile" },
+                    "Tags" : [ 
+                        {"Key" : "Application", "Value" : { "Ref" : "AWS::StackId"} },
+                        {"Key" : "Name", "Value" : "CompanyNewsTraining" } 
+                    ],
                     "NetworkInterfaces" : [{
                         "GroupSet"                 : [{ "Ref" : "InstanceSecurityGroup" }],
                         "AssociatePublicIpAddress" : "true",
@@ -313,6 +390,13 @@
                         "systemctl enable tomcat\n",
                         "systemctl start tomcat\n",
 
+                        "# Install CodeDeploy agent\n",
+                        "apt-get install ruby -y\n",
+                        "curl https://aws-codedeploy-ap-southeast-2.s3.amazonaws.com/latest/install > install\n",
+                        "chmod +x ./install\n",
+                        "./install auto\n",
+                        "service codedeploy-agent start\n",
+
                         "cfn-signal -e $? ",
                         "         --stack ", { "Ref" : "AWS::StackName" },
                         "         --resource WebServerInstance ",
@@ -354,6 +438,7 @@
                     }
                 }
             }
+
         },
 
         "Outputs" : {
