@@ -235,9 +235,9 @@
                                         "Environment=CATALINA_HOME=/opt/tomcat\n",
                                         "Environment=CATALINA_BASE=/opt/tomcat\n",
                                         "Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'\n",
-                                        "Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom'\n",
+                                        "Environment='JAVA_OPTS=-Djava.awt.headless=true -Djava.security.egd=file:/dev/./urandom -Djava.net.preferIPv4Stack=true'\n",
 
-                                        "ExecStart=/opt/tomcat/bin/startup.sh\n",
+                                        "ExecStart=/usr/bin/authbind --deep /bin/bash -c /opt/tomcat/bin/startup.sh\n",
                                         "ExecStop=/opt/tomcat/bin/shutdown.sh\n",
 
                                         "User=tomcat\n",
@@ -301,6 +301,13 @@
                         "chmod -R g+r /opt/tomcat/conf\n",
                         "chmod g+x /opt/tomcat/conf\n",
                         "chown -R tomcat /opt/tomcat/webapps/ /opt/tomcat/work/ /opt/tomcat/temp/ /opt/tomcat/logs/\n",
+
+                        "# Configure Tomcat for port 80 using authbind\n",
+                        "apt-get install authbind -y\n",
+                        "touch /etc/authbind/byport/{443,80}\n",
+                        "chmod 500 /etc/authbind/byport/{443,80}\n",
+                        "chown tomcat:tomcat /etc/authbind/byport/{443,80}\n",
+                        "sudo sed -i 's/8080/80/g' /opt/tomcat/conf/server.xml\n",
 
                         "systemctl daemon-reload\n",
                         "systemctl enable tomcat\n",
