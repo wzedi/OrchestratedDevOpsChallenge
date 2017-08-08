@@ -6,10 +6,14 @@ plugins {
 
 repositories {
     jcenter()
+    mavenCentral()
 }
 
 dependencies {
+    compile 'org.prevayler:prevayler-core:2.6'
+    compile 'org.prevayler:prevayler-factory:2.6'
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0' 
+    providedCompile 'javax.servlet.jsp.jstl:javax.servlet.jsp.jstl-api:1.2.1' 
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:2.7.19'
 }
