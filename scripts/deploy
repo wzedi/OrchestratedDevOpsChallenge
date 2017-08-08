@@ -19,5 +19,5 @@ aws deploy push --application-name CompanyNews \
 
 aws deploy create-deployment --application-name CompanyNews \
     --deployment-config-name CodeDeployDefault.OneAtATime \
-    --deployment-group-name Training \
+    --deployment-group-name TrainingDeploymentGroup \
     --s3-location bucket=orchestrated.devopschallenge.deploy,bundleType=zip,key=CompanyNews.zip
