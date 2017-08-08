@@ -1,0 +1,58 @@
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+
+        "Description" : "AWS CloudFormation Template for CodeDeploy application and deployment groups",
+
+        "Resources" : {
+
+            "CompanyNewsApplication" : {
+                "Type" : "AWS::CodeDeploy::Application",
+                "Properties" : {
+                    "ApplicationName" : "CompanyNews"
+                }
+            },
+
+            "CodeDeployServiceRole" : {
+                "Type": "AWS::IAM::Role",
+                "Properties": {
+                    "AssumeRolePolicyDocument": {
+                        "Version": "2012-10-17",
+                        "Statement": [
+                        {
+                            "Sid": "",
+                            "Effect": "Allow",
+                            "Principal": {
+                                "Service": [
+                                    "codedeploy.amazonaws.com"
+                                    ]
+                            },
+                            "Action": "sts:AssumeRole"
+                        }
+                        ]
+                    }
+                }
+            },
+
+            "TrainingDeploymentGroup" : {
+                "Type" : "AWS::CodeDeploy::DeploymentGroup",
+                "Properties" : {
+                    "ApplicationName" : { "Ref" : "CompanyNewsApplication" },
+                    "Ec2TagFilters" : [
+                    {
+                        "Key" : "Name",
+                        "Type" : "KEY_AND_VALUE",
+                        "Value" : "CompanyNewsTraining"
+                    }
+                    ],
+                    "ServiceRoleArn" : { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] },
+                }
+            },
+
+            "DeployBucket": {
+                "Type" : "AWS::S3::Bucket",
+                "Properties" : {
+                    "BucketName" : "orchestrated.devopschallenge.deploy",
+                }
+            }
+        }
+}
