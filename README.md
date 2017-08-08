@@ -1,5 +1,18 @@
 # OrchestratedDevOpsChallenge
 
+## Project setup
+* You will need a computer with git, vagrant and VirtualBox installed and correctly configured.
+* Clone the project from github: git@github.com:wzedi/OrchestratedDevOpsChallenge.git
+* Launch the vagrant virtual machine: vagrant up
+* Change directory to /opt/OrchestratedDevOpsChallenge
+* Use gradle to build and test the application: ./gradlew test or ./gradlew build
+
+## Deploying the application
+* You will need a valid AWS IAM user account
+* Obtain an active access key ID and secret access key
+* Attach the AWSCodeDeployDeployerAccess manager policy to this user
+* After a successful build deploy the application with ./scripts/deploy
+
 ## Principles Applied
 
 ## Justification for decisions
