@@ -40,6 +40,7 @@
                 "Type" : "AWS::CodeDeploy::DeploymentGroup",
                 "Properties" : {
                     "ApplicationName" : { "Ref" : "CompanyNewsApplication" },
+                    "DeploymentGroupName" : "TrainingDeploymentGroup",
                     "Ec2TagFilters" : [
                     {
                         "Key" : "Name",
