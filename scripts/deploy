@@ -1,0 +1,23 @@
+#! /bin/bash
+
+set -e
+
+cd "$(dirname "$0")"
+
+if [ -d dist ]
+then
+    rm -rf dist
+fi
+
+mkdir dist
+cp ../java-app/CompanyNews/build/libs/CompanyNews.war dist
+cp appspec.yml start_application stop_application dist
+
+aws deploy push --application-name CompanyNews \
+   --s3-location s3://orchestrated.devopschallenge.deploy/CompanyNews.zip \
+   --source dist/
+
+aws deploy create-deployment --application-name CompanyNews \
+    --deployment-config-name CodeDeployDefault.OneAtATime \
+    --deployment-group-name Training \
+    --s3-location bucket=orchestrated.devopschallenge.deploy,bundleType=zip,key=CompanyNews.zip
