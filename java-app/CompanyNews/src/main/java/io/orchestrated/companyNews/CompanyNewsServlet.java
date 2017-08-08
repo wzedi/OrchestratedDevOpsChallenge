@@ -21,7 +21,7 @@ import io.orchestrated.companyNews.objectStore.StorageException;
 
 @WebServlet(
         name = "CompanyNewsServlet", 
-        urlPatterns = {"news"}, 
+        urlPatterns = {"/news"}, 
         loadOnStartup = 1,
         initParams={ @WebInitParam(name="objectStoreClass", value="io.orchestrated.companyNews.objectStore.prevayler.PrevaylerObjectStore") }
 ) 
