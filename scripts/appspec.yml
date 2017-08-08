@@ -1,0 +1,12 @@
+version: 0.0
+os: linux
+files:
+  - source: CompanyNews.war
+    destination: /opt/tomcat/webapps
+hooks:
+  ApplicationStop:
+    - location: stop_application
+      timeout: 60
+  ApplicationStart:
+    - location: start_application
+      timeout: 120
