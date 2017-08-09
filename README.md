@@ -16,9 +16,15 @@
 
 ## Provision AWS Stacks
 * Provision the stacks with ./scripts/provision - the script will prompt for the Key Pair name created in the AWS User section above
+* Monitory stack provisioning in the Cloud Formation console
 
 ## Deploy the Application
 * After a successful build deploy the application with ./scripts/deploy
+* Monitor deployment progress in the Code Deploy console
+* Find the CompanyNews servers in the list of EC2 servers in the management console and get the public IP for the server
+
+## Run the application
+* Browse to http://{public IP}/CompanyNew to run the application
 
 ## Principles Applied
 * Every attempt has been made to keep the code and templates DRY - not repeating code
