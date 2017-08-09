@@ -1,19 +1,28 @@
 # OrchestratedDevOpsChallenge
 
+## AWS User
+* You will need a valid AWS IAM user account
+* Obtain an active access key ID and secret access key
+* Attach the AdminsitratorAccess managed policy to this user
+* Create a Key Pair in the EC2 Management Console and install the priavet key on your localhost
+
 ## Project setup
 * You will need a computer with git, vagrant and VirtualBox installed and correctly configured.
 * Clone the project from github: git@github.com:wzedi/OrchestratedDevOpsChallenge.git
-* Launch the vagrant virtual machine: vagrant up
+* Launch the vagrant virtual machine: vagrant up - you will be prompted to enter the AWS Access Key ID and Secret Access Key when launching the VM
+* Connect to the vagrant machine: vagrant ssh
 * Change directory to /opt/OrchestratedDevOpsChallenge
 * Use gradle to build and test the application: ./gradlew test or ./gradlew build
 
-## Deploying the application
-* You will need a valid AWS IAM user account
-* Obtain an active access key ID and secret access key
-* Attach the AWSCodeDeployDeployerAccess manager policy to this user
+## Provision AWS Stacks
+* Provision the stacks with ./scripts/provision - the script will prompt for the Key Pair name created in the AWS User section above
+
+## Deploy the Application
 * After a successful build deploy the application with ./scripts/deploy
 
 ## Principles Applied
+* Every attempt has been made to keep the code and templates DRY - not repeating code
+* SOLID OO principles have been applied
 
 ## Justification for decisions
 * Static content is stored in an Amazon S3 bucket
@@ -27,6 +36,6 @@
 
 ## Tool Selection and Configuration
 * gradle - build tool and dependency manager. Generated wrapper script for project independence across dev environments.
-
-
-## Recommendations
+* vagrant - virtual maching creating a portable development environment
+* AWS Cloud Formation - infrastructure as code
+* AWS Code Deploy - application deployment system
