@@ -36,6 +36,9 @@ public class CompanyNewsServletTest {
         when(request.getRequestDispatcher("response.jsp"))
             .thenReturn(requestDispatcher);
 
+        when(request.getServerName())
+            .thenReturn("localhost");
+
         Collection<Model> newsArticles = new ArrayList<Model>();
         NewsArticle newsArticle;
         for (int i = 0; i < 5; i++) {
@@ -61,6 +64,8 @@ public class CompanyNewsServletTest {
         when(request.getParameter("story")).thenReturn("story");
         when(request.getRequestDispatcher("response.jsp"))
             .thenReturn(requestDispatcher);
+        when(request.getServerName())
+            .thenReturn("localhost");
 
         NewsArticle newsArticle = new NewsArticle();
         newsArticle.setHeadline(request.getParameter("headline"));
