@@ -21,7 +21,7 @@ cp appspec.yml start_application stop_application dist
 mkdir assets
 cp -r ../java-app/CompanyNews/src/main/webapp/images/ assets
 
-aws s3 sync assets s3://orchestrated.devopschallenge.assets/
+aws s3 sync assets s3://orchestrated.devopschallenge.assets/ --acl public-read
 
 aws deploy push --application-name CompanyNews \
    --s3-location s3://orchestrated.devopschallenge.deploy/CompanyNews.zip \
