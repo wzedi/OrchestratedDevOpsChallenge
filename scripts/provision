@@ -1,0 +1,10 @@
+#! /bin/bash
+
+set -e
+
+read -p "Enter the AWS Key Pair name to use with the EC2 instances in these stacks:" KeyPairName
+echo "Creating CodeDeploy stack..."
+aws cloudformation create-stack  --stack-name CompanyNewsCodeDeploy --template-body file:///`pwd`/provision/cloudformation/codedeploy.template --capabilities CAPABILITY_IAM
+
+echo "Creating Training stack..."
+aws cloudformation create-stack  --stack-name Training  --template-body file:///`pwd`/provision/cloudformation/training.template --parameters  ParameterKey=KeyName,ParameterValue=$KeyPairName ParameterKey=InstanceType,ParameterValue=t2.micro ParameterKey=ImageId,ParameterValue=ami-e2021d81 ParameterKey=SSHLocation,ParameterValue=0.0.0.0/0 --capabilities CAPABILITY_IAM

@@ -29,7 +29,10 @@
                             "Action": "sts:AssumeRole"
                         }
                         ]
-                    }
+                    },
+                    "ManagedPolicyArns" : [
+                        "arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole"
+                    ]
                 }
             },
 
@@ -37,6 +40,7 @@
                 "Type" : "AWS::CodeDeploy::DeploymentGroup",
                 "Properties" : {
                     "ApplicationName" : { "Ref" : "CompanyNewsApplication" },
+                    "DeploymentGroupName" : "TrainingDeploymentGroup",
                     "Ec2TagFilters" : [
                     {
                         "Key" : "Name",
@@ -44,14 +48,14 @@
                         "Value" : "CompanyNewsTraining"
                     }
                     ],
-                    "ServiceRoleArn" : { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] },
+                    "ServiceRoleArn" : { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
                 }
             },
 
             "DeployBucket": {
                 "Type" : "AWS::S3::Bucket",
                 "Properties" : {
-                    "BucketName" : "orchestrated.devopschallenge.deploy",
+                    "BucketName" : "orchestrated.devopschallenge.deploy"
                 }
             }
         }
