@@ -16,7 +16,7 @@ import org.prevayler.PrevaylerFactory;
 
 public class PrevaylerObjectStore implements ObjectStore, Serializable
 {
-    private final String DATA_FOLDER = "data";
+    private final String DATA_FOLDER = "/var/spool/companyNews";
     private final Hashtable<Integer, Model> models;
     transient private Prevayler<PrevaylerObjectStore> prevayler = null;
 
