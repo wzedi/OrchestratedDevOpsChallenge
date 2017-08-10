@@ -8,6 +8,7 @@ end
 Vagrant.configure("2") do |config|
   config.vm.box = "ubuntu/xenial64"
   config.vm.synced_folder ".", "/opt/OrchestratedDevOpsChallenge"
+  config.vm.network :forwarded_port, guest: 8080, host: 8080
 
   if !provisioned? || ARGV[1] == '--provision'
     print "Please enter your AWS credentials\n"
