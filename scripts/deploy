@@ -9,6 +9,11 @@ then
     rm -rf dist
 fi
 
+if [ -d assets ]
+then
+    rm -rf assets
+fi
+
 mkdir dist
 cp ../java-app/CompanyNews/build/libs/CompanyNews.war dist
 cp appspec.yml start_application stop_application dist
@@ -16,7 +21,7 @@ cp appspec.yml start_application stop_application dist
 mkdir assets
 cp -r ../java-app/CompanyNews/src/main/webapp/images/ assets
 
-aws s3 sync assets/* s3://io.orchestrated.devopschallenge.assets
+aws s3 sync assets s3://orchestrated.devopschallenge.assets/
 
 aws deploy push --application-name CompanyNews \
    --s3-location s3://orchestrated.devopschallenge.deploy/CompanyNews.zip \
