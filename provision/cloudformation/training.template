@@ -379,6 +379,12 @@
                         "chmod g+x /opt/tomcat/conf\n",
                         "chown -R tomcat /opt/tomcat/webapps/ /opt/tomcat/work/ /opt/tomcat/temp/ /opt/tomcat/logs/\n",
 
+                        "# Create spool path for Prevayler storage\n",
+                        "mkdir /var/spool/companyNews\n",
+                        "chgrp -R tomcat /var/spool/companyNews\n",
+                        "chmod -R g+rw /var/spool/companyNews\n",
+                        "chown -R tomcat /var/spool/companyNews\n",
+
                         "# Configure Tomcat for port 80 using authbind\n",
                         "apt-get install authbind -y\n",
                         "touch /etc/authbind/byport/{443,80}\n",
