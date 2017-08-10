@@ -26,7 +26,7 @@ import io.orchestrated.companyNews.objectStore.StorageException;
         initParams={ 
             @WebInitParam(name="objectStoreClass", value="io.orchestrated.companyNews.objectStore.prevayler.PrevaylerObjectStore"),
             @WebInitParam(name="localAssetUrl", value="/CompanyNews/images"),
-            @WebInitParam(name="remoteAssetUrl", value="s3://orchestrated.devopschallenge.assets.s3-website-ap-southeast-2.amazonaws.com/images")
+            @WebInitParam(name="remoteAssetUrl", value="http://orchestrated.devopschallenge.assets.s3-website-ap-southeast-2.amazonaws.com/images")
         }
 ) 
 public class CompanyNewsServlet extends HttpServlet {
