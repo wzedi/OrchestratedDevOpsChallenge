@@ -23,10 +23,16 @@ import io.orchestrated.companyNews.objectStore.StorageException;
         name = "CompanyNewsServlet", 
         urlPatterns = {"/news"}, 
         loadOnStartup = 1,
-        initParams={ @WebInitParam(name="objectStoreClass", value="io.orchestrated.companyNews.objectStore.prevayler.PrevaylerObjectStore") }
+        initParams={ 
+            @WebInitParam(name="objectStoreClass", value="io.orchestrated.companyNews.objectStore.prevayler.PrevaylerObjectStore"),
+            @WebInitParam(name="localAssetUrl", value="/CompanyNews/images"),
+            @WebInitParam(name="remoteAssetUrl", value="s3://orchestrated.devopschallenge.assets.s3-website-ap-southeast-2.amazonaws.com/images")
+        }
 ) 
 public class CompanyNewsServlet extends HttpServlet {
     private ObjectStore objectStore;
+    private String localAssetUrl;
+    private String remoteAssetUrl;
 
     /**
      * Suppress unchecked/unsafe operations warning for reflection operations
@@ -34,6 +40,8 @@ public class CompanyNewsServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     public void init(ServletConfig config) {
         String objectStoreClassName = config.getInitParameter("objectStoreClass");
+        this.localAssetUrl = config.getInitParameter("localAssetUrl");
+        this.remoteAssetUrl = config.getInitParameter("remoteAssetUrl");
         this.setObjectStoreClass(objectStoreClassName);
     }
 
@@ -66,6 +74,7 @@ public class CompanyNewsServlet extends HttpServlet {
     {
         Collection<Model> newsArticles = getArticles();
         request.setAttribute("articles", newsArticles);
+        request.setAttribute("assetUrl", this.getAssetUrl(request));
         request.getRequestDispatcher("response.jsp").forward(request, response);
     }
 
@@ -76,7 +85,7 @@ public class CompanyNewsServlet extends HttpServlet {
         try {
             NewsArticle newsArticle = new NewsArticle();
             newsArticle.setHeadline(request.getParameter("headline"));
-            newsArticle.setStory(request.getParameter("story"));
+            newsArticle.setStory(request.getParameter("story").replace("\r\n", "\\n"));
 
             this.objectStore.store(newsArticle);
         } catch (StorageException e) {
@@ -85,6 +94,7 @@ public class CompanyNewsServlet extends HttpServlet {
 
         Collection<Model> newsArticles = getArticles();
         request.setAttribute("articles", newsArticles);
+        request.setAttribute("assetUrl", this.getAssetUrl(request));
         request.getRequestDispatcher("response.jsp").forward(request, response); 
     }
 
@@ -99,5 +109,10 @@ public class CompanyNewsServlet extends HttpServlet {
         }
 
         return newsArticles;
+    }
+
+    private String getAssetUrl(HttpServletRequest request)
+    {
+        return request.getServerName().equals("localhost") ? this.localAssetUrl : this.remoteAssetUrl;
     }
 }

@@ -9,6 +9,9 @@
         <table>
             <thead>
                 <tr>
+                    <img src="${assetUrl}/company_news.jpg"/>
+                </tr>
+                <tr>
                     <th>Headline</th>
                 </tr>
             </thead>
