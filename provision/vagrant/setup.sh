@@ -11,6 +11,9 @@ echo "aws_access_key_id="$1 >> /home/ubuntu/.aws/credentials
 echo "aws_secret_access_key="$2 >> /home/ubuntu/.aws/credentials
 echo "region=ap-southeast-2" >> /home/ubuntu/.aws/credentials
 
+mkdir /var/spool/companyNews
+chmod a+rw /var/spool/companyNews
+
 sudo apt-get update -y
 
 ## Install the AWS CLI
