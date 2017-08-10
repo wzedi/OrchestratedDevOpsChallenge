@@ -371,7 +371,7 @@
                         "# Install tomcat\n",
                         "groupadd tomcat\n",
                         "useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat\n",
-                        "curl -O http://apache.mirror.serversaustralia.com.au/tomcat/tomcat-8/v8.5.16/bin/apache-tomcat-8.5.16.tar.gz\n",
+                        "curl -O http://mirror.ventraip.net.au/apache/tomcat/tomcat-8/v8.5.20/bin/apache-tomcat-8.5.20.tar.gz\n",
                         "mkdir /opt/tomcat\n",
                         "tar xzvf apache-tomcat-8*tar.gz -C /opt/tomcat --strip-components=1\n",
                         "chgrp -R tomcat /opt/tomcat\n",
