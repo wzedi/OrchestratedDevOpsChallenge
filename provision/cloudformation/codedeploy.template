@@ -48,14 +48,14 @@
                         "Value" : "CompanyNewsTraining"
                     }
                     ],
-                    "ServiceRoleArn" : { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] },
+                    "ServiceRoleArn" : { "Fn::GetAtt" : [ "CodeDeployServiceRole", "Arn" ] }
                 }
             },
 
             "DeployBucket": {
                 "Type" : "AWS::S3::Bucket",
                 "Properties" : {
-                    "BucketName" : "orchestrated.devopschallenge.deploy",
+                    "BucketName" : "orchestrated.devopschallenge.deploy"
                 }
             }
         }
