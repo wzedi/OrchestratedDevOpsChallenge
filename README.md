@@ -12,7 +12,11 @@
 * Launch the vagrant virtual machine: vagrant up - you will be prompted to enter the AWS Access Key ID and Secret Access Key when launching the VM
 * Connect to the vagrant machine: vagrant ssh
 * Change directory to /opt/OrchestratedDevOpsChallenge
+
+## Build the application
+* Change directory to /opt/OrchestratedDevOpsChallenge/java-app/CompanyNews
 * Use gradle to build and test the application: ./gradlew test or ./gradlew build
+* Browse to http://localhost:8080/CompanyNews to run the application
 
 ## Provision AWS Stacks
 * Provision the stacks with ./scripts/provision - the script will prompt for the Key Pair name created in the AWS User section above
@@ -24,7 +28,7 @@
 * Find the CompanyNews servers in the list of EC2 servers in the management console and get the public IP for the server
 
 ## Run the application
-* Browse to http://{public IP}/CompanyNew to run the application
+* Browse to http://{public IP}/CompanyNews to run the application
 
 ## Principles Applied
 * Every attempt has been made to keep the code and templates DRY - not repeating code
